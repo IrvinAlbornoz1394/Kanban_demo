@@ -1,8 +1,9 @@
 import { configureStore } from '@reduxjs/toolkit';
+import boardSlice from '../features/boards/boardsSlice';
 
 export const store = configureStore({
   reducer: {
-    // aquí irán los slices
+    boards: boardSlice,
   },
 });
 
