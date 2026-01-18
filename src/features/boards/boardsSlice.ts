@@ -1,41 +1,52 @@
-import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, nanoid, type PayloadAction } from '@reduxjs/toolkit';
 import type { Board, ID } from '../../types/kanban';
 
-interface BoardsState {
-  entities: Record<ID, Board>;
-  ids: ID[];
-}
-
-const initialState: BoardsState = {
-  entities: {},
-  ids: [],
-};
 
 const boardsSlice = createSlice({
   name: 'boards',
-  initialState,
+  initialState: [] as Board[],
   reducers: {
-    addBoard: {
-      prepare(name: string) {
-        const id = crypto.randomUUID();
-        const now = new Date().toISOString();
-
+    boardCreated: {
+      reducer(state, action: PayloadAction<Board>) {
+        state.push(action.payload);
+      },
+      prepare(workspaceId: ID, name: string) {
         return {
           payload: {
-            id,
+            id: nanoid(),
+            workspaceId,
             name,
             columnIds: [],
-            createdAt: now,
-          } as Board,
+          },
         };
       },
-      reducer(state, action: PayloadAction<Board>) {
-        state.entities[action.payload.id] = action.payload;
-        state.ids.push(action.payload.id);
-      },
     },
+    boardColumnsAssigned(
+      state,
+      action: PayloadAction<{ boardId: ID; columnIds: ID[] }>
+    ) {
+      const board = state.find(b => b.id === action.payload.boardId);
+      if (board) {
+        board.columnIds = action.payload.columnIds;
+      }
+    },
+    addColumnToBoard(
+      state,
+      action: PayloadAction<{
+        boardId: ID;
+        columnId: ID;
+      }>
+    ) {
+      const board = state.find(
+        (b) => b.id === action.payload.boardId
+      );
+      if (!board) return;
+
+      board.columnIds.push(action.payload.columnId);
+    }
+
   },
 });
 
-export const { addBoard } = boardsSlice.actions;
+export const { boardCreated, boardColumnsAssigned, addColumnToBoard } = boardsSlice.actions;
 export default boardsSlice.reducer;

@@ -25,6 +25,7 @@ const tasksSlice = createSlice({
             columnId,
             title,
             priority: 'medium',
+            archived: false,
             createdAt: now,
             updatedAt: now,
           } as Task,
@@ -35,8 +36,34 @@ const tasksSlice = createSlice({
         state.ids.push(action.payload.id);
       },
     },
+
+    archiveTask(
+      state,
+      action: PayloadAction<{ taskId: ID }>
+    ) {
+      const task = state.entities[action.payload.taskId];
+      if (!task) return;
+
+      task.archived = true;
+      //task.updatedAt = new Date().toISOString();
+    },
+
+    deleteTask(
+      state,
+      action: PayloadAction<{ taskId: ID }>
+    ) {
+      const { taskId } = action.payload;
+
+      delete state.entities[taskId];
+      state.ids = state.ids.filter((id) => id !== taskId);
+    },
   },
 });
 
-export const { addTask } = tasksSlice.actions;
+export const {
+  addTask,
+  archiveTask,
+  deleteTask,
+} = tasksSlice.actions;
+
 export default tasksSlice.reducer;

@@ -1,10 +1,16 @@
 export type ID = string;
 
+export interface Workspace {
+  id: string;
+  name: string;
+  boardIds: string[];
+}
+
 export interface Board {
   id: ID;
+  workspaceId: ID;
   name: string;
   columnIds: ID[];
-  createdAt: string;
 }
 
 export interface Column {
@@ -12,6 +18,7 @@ export interface Column {
   boardId: ID;
   title: string;
   taskIds: ID[];
+  isDefault: boolean;
 }
 
 export interface Task {
@@ -19,8 +26,6 @@ export interface Task {
   columnId: ID;
   title: string;
   description?: string;
-  priority: 'low' | 'medium' | 'high' | 'urgent';
-  dueDate?: string;
-  createdAt: string;
-  updatedAt: string;
+  archived: boolean; 
 }
+
