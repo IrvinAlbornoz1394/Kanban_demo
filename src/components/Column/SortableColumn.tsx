@@ -23,15 +23,21 @@ export function SortableColumn({ column, tasks }: Props) {
   };
 
   return (
-    <div ref={setNodeRef} style={style}>
-      <Column
+    <div
+        ref={setNodeRef}
+        style={{
+        ...style,
+        height: '100%',
+        }}
+    >
+        <Column
         column={column}
         tasks={tasks}
         dragHandleProps={{
-          ...attributes,
-          ...listeners,
+            ...attributes,
+            ...listeners,
         }}
-      />
+        />
     </div>
   );
 }

@@ -5,7 +5,11 @@ export const ColumnWrapper = styled.div`
   border-radius: 8px;
   padding: 12px;
   width: 260px;
-  margin-right: 16px;
+
+  display: flex;
+  flex-direction: column;
+
+  height: 100%;
 `;
 
 export const ColumnTitle = styled.h3`

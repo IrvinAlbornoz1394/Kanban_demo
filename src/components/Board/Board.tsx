@@ -1,7 +1,4 @@
-//import { useState } from 'react';
-import {  useAppSelector } from '../../app/hooks';
-import { useAppDispatch } from '../../app/hooks';
-//import { Column } from '../Column/Column';
+import { useAppSelector, useAppDispatch } from '../../app/hooks';
 import { BoardWrapper } from './Board.styles';
 import { AddColumnCard } from '../Column/AddColumnCard';
 import {
@@ -18,15 +15,17 @@ import { taskMoved } from '../../features/columns/columnsSlice';
 import { taskColumnChanged } from '../../features/tasks/tasksSlice';
 import { reorderColumns } from '../../features/boards/boardsSlice';
 
-
-
-
 export function Board({ boardId }: { boardId: string }) {
   const dispatch = useAppDispatch();
 
   const board = useAppSelector((state) =>
     state.boards.find((b) => b.id === boardId)
   );
+
+  const columns = useAppSelector((state) => state.columns);
+  const tasks = useAppSelector((state) => state.tasks);
+
+  if (!board) return null;
 
   function handleDragEnd(event: DragEndEvent) {
     if (!board) return;
@@ -71,6 +70,11 @@ export function Board({ boardId }: { boardId: string }) {
         toColumnId = column.id;
         toIndex = column.taskIds.indexOf(overId);
       }
+
+      if (column.id === overId) {
+        toColumnId = column.id;
+        toIndex = column.taskIds.length;
+      }
     }
 
     if (!fromColumnId || !toColumnId) return;
@@ -94,45 +98,36 @@ export function Board({ boardId }: { boardId: string }) {
     }
   }
 
-
-  const columns = useAppSelector((state) => state.columns);
-  const tasks = useAppSelector((state) => state.tasks);
-
-  //const [name, setName] = useState(board?.name ?? '');
-
-  if (!board) return null;
-
   return (
-  <DndContext
-  collisionDetection={closestCenter}
-  onDragEnd={handleDragEnd}
->
-  <SortableContext
-    items={board.columnIds}
-    strategy={horizontalListSortingStrategy}
-  >
-    <BoardWrapper>
-      {board.columnIds.map((columnId) => {
-        const column = columns.entities[columnId];
-        if (!column) return null;
+    <DndContext
+      collisionDetection={closestCenter}
+      onDragEnd={handleDragEnd}
+    >
+      <SortableContext
+        items={board.columnIds}
+        strategy={horizontalListSortingStrategy}
+      >
+        <BoardWrapper>
+          {board.columnIds.map((columnId) => {
+            const column = columns.entities[columnId];
+            if (!column) return null;
 
-        const columnTasks = column.taskIds
-          .map((taskId) => tasks.entities[taskId])
-          .filter((task) => task && !task.archived);
+            const columnTasks = column.taskIds
+              .map((taskId) => tasks.entities[taskId])
+              .filter((task) => task && !task.archived);
 
-        return (
-          <SortableColumn
-            key={column.id}
-            column={column}
-            tasks={columnTasks}
-          />
-        );
-      })}
+            return (
+              <SortableColumn
+                key={column.id}
+                column={column}
+                tasks={columnTasks}
+              />
+            );
+          })}
 
-      <AddColumnCard boardId={board.id} />
-    </BoardWrapper>
-  </SortableContext>
-</DndContext>
-
+          <AddColumnCard boardId={board.id} />
+        </BoardWrapper>
+      </SortableContext>
+    </DndContext>
   );
 }

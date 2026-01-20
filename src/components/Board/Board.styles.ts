@@ -14,9 +14,8 @@ export const BoardHeader = styled.div`
 
 export const BoardWrapper = styled.div`
   display: flex;
-  align-items: flex-start;
+  align-items: stretch;
   gap: 16px;
-  overflow-x: auto;
   padding: 16px;
   height: calc(100vh - 112px);
 `;

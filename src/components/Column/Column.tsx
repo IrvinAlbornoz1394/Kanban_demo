@@ -121,8 +121,6 @@ export function Column({ column, tasks, dragHandleProps }: Props) {
 
         <div style={{ display: 'flex', gap: '6px' }}>
           <b>{tasks.length}</b>
-
-          {/* ❌ eliminar solo si NO es default */}
           {!column.isDefault && (
             <button onClick={handleDeleteColumn}>
               ✕
@@ -133,17 +131,21 @@ export function Column({ column, tasks, dragHandleProps }: Props) {
 
       {/* Tasks */}
        
-      <SortableContext
-        items={activeTasks.map((t) => t.id)}
-        strategy={verticalListSortingStrategy}
+      <div
+        style={{
+          flex: 1,               
+          minHeight: '40px',     
+          paddingTop: '8px',
+        }}
       >
-        {activeTasks.map((task) => (
-          <SortableTask key={task.id} task={task} />
-        ))}
-        
-      </SortableContext>
-
-      {/* Crear task */}
+        <SortableContext
+          items={activeTasks.map((t) => t.id)}
+          strategy={verticalListSortingStrategy}
+        >
+          {activeTasks.map((task) => (
+            <SortableTask key={task.id} task={task} />
+          ))}
+          {/* Crear task */}
       {isAdding ? (
         <input
           autoFocus
@@ -167,6 +169,10 @@ export function Column({ column, tasks, dragHandleProps }: Props) {
           + Add task
         </button>
       )}
+        </SortableContext>
+      </div>
+
+      
     </ColumnWrapper>
   );
 }
