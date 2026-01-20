@@ -36,7 +36,6 @@ const tasksSlice = createSlice({
         state.ids.push(action.payload.id);
       },
     },
-
     archiveTask(
       state,
       action: PayloadAction<{ taskId: ID }>
@@ -47,7 +46,6 @@ const tasksSlice = createSlice({
       task.archived = true;
       //task.updatedAt = new Date().toISOString();
     },
-
     deleteTask(
       state,
       action: PayloadAction<{ taskId: ID }>
@@ -57,6 +55,18 @@ const tasksSlice = createSlice({
       delete state.entities[taskId];
       state.ids = state.ids.filter((id) => id !== taskId);
     },
+    taskColumnChanged(
+      state,
+      action: PayloadAction<{
+        taskId: ID;
+        columnId: ID;
+      }>
+    ) {
+      const task = state.entities[action.payload.taskId];
+      if (!task) return;
+
+      task.columnId = action.payload.columnId;
+    }
   },
 });
 
@@ -64,6 +74,7 @@ export const {
   addTask,
   archiveTask,
   deleteTask,
+  taskColumnChanged
 } = tasksSlice.actions;
 
 export default tasksSlice.reducer;

@@ -88,8 +88,43 @@ const columnsSlice = createSlice({
       if (column.isDefault) return;
 
       column.title = action.payload.title;
-    }
+    },
+    taskMoved(
+      state,
+      action: PayloadAction<{
+        taskId: ID;
+        fromColumnId: ID;
+        toColumnId: ID;
+        toIndex: number;
+      }>
+    ) {
+      const { taskId, fromColumnId, toColumnId, toIndex } =
+        action.payload;
 
+      const fromColumn = state.entities[fromColumnId];
+      const toColumn = state.entities[toColumnId];
+
+      if (!fromColumn || !toColumn) return;
+
+      // quitar de columna origen
+      fromColumn.taskIds = fromColumn.taskIds.filter(
+        (id) => id !== taskId
+      );
+
+      // insertar en columna destino
+      toColumn.taskIds.splice(toIndex, 0, taskId);
+    },
+    removeTaskEverywhere(
+      state,
+      action: PayloadAction<{ taskId: ID }>
+    ) {
+      Object.values(state.entities).forEach((column) => {
+        if (!column) return;
+        column.taskIds = column.taskIds.filter(
+          (id) => id !== action.payload.taskId
+        );
+      });
+    }
   },
 });
 
@@ -100,6 +135,8 @@ export const {
   taskAddedToColumn,
   removeTaskFromColumn,
   columnRenamed,
+  taskMoved,
+  removeTaskEverywhere
 } = columnsSlice.actions;
 
 export default columnsSlice.reducer;

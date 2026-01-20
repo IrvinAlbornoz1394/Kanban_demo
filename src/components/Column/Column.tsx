@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import type { Column as ColumnType, Task as TaskType } from '../../types/kanban';
-import { Task } from '../Task/Task';
 import { ColumnWrapper, ColumnTitle } from './Column.styles';
 import { useAppDispatch } from '../../app/hooks';
 import { addTask, deleteTask } from '../../features/tasks/tasksSlice';
@@ -9,13 +8,21 @@ import {
   columnRemoved,
   columnRenamed,
 } from '../../features/columns/columnsSlice';
+import {
+  SortableContext,
+  verticalListSortingStrategy,
+} from '@dnd-kit/sortable';
+import { SortableTask } from '../Task/SortableTask';
+
 
 interface Props {
   column: ColumnType;
   tasks: TaskType[];
+  dragHandleProps?: React.HTMLAttributes<HTMLDivElement>;
 }
 
-export function Column({ column, tasks }: Props) {
+
+export function Column({ column, tasks, dragHandleProps }: Props) {
   const dispatch = useAppDispatch();
 
   // 🆕 estados
@@ -23,6 +30,8 @@ export function Column({ column, tasks }: Props) {
   const [title, setTitle] = useState('');
   const [isEditingTitle, setIsEditingTitle] = useState(false);
   const [columnTitle, setColumnTitle] = useState(column.title);
+
+  const activeTasks = tasks.filter((t) => !t.archived);
 
   function handleSubmit() {
     if (!title.trim()) return;
@@ -65,6 +74,17 @@ export function Column({ column, tasks }: Props) {
 
   return (
     <ColumnWrapper>
+      <div
+        {...dragHandleProps}
+        style={{
+          height: '6px',
+          background: 'var(--accent)',
+          cursor: 'grab',
+          borderRadius: '8px 8px 0 0',
+        }}
+      />
+
+
       {/* Header */}
       <div
         style={{
@@ -112,9 +132,16 @@ export function Column({ column, tasks }: Props) {
       </div>
 
       {/* Tasks */}
-      {tasks.map((task) => (
-        <Task key={task.id} task={task} />
-      ))}
+       
+      <SortableContext
+        items={activeTasks.map((t) => t.id)}
+        strategy={verticalListSortingStrategy}
+      >
+        {activeTasks.map((task) => (
+          <SortableTask key={task.id} task={task} />
+        ))}
+        
+      </SortableContext>
 
       {/* Crear task */}
       {isAdding ? (

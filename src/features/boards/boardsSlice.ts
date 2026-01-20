@@ -43,10 +43,32 @@ const boardsSlice = createSlice({
       if (!board) return;
 
       board.columnIds.push(action.payload.columnId);
-    }
+    },
+    reorderColumns(
+      state,
+      action: PayloadAction<{
+        boardId: ID;
+        activeId: ID;
+        overId: ID;
+      }>
+    ) {
+      const board = state.find(
+        (b) => b.id === action.payload.boardId
+      );
+      if (!board) return;
 
+      const { activeId, overId } = action.payload;
+
+      const oldIndex = board.columnIds.indexOf(activeId);
+      const newIndex = board.columnIds.indexOf(overId);
+
+      if (oldIndex === -1 || newIndex === -1) return;
+
+      const [moved] = board.columnIds.splice(oldIndex, 1);
+      board.columnIds.splice(newIndex, 0, moved);
+    }
   },
 });
 
-export const { boardCreated, boardColumnsAssigned, addColumnToBoard } = boardsSlice.actions;
+export const { boardCreated, boardColumnsAssigned, addColumnToBoard, reorderColumns } = boardsSlice.actions;
 export default boardsSlice.reducer;

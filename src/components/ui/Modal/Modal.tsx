@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import type { ReactNode } from 'react';
 import { Overlay, Container } from './Modal.styles';
 
 export function Modal({
