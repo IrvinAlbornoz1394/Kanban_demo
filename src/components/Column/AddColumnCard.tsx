@@ -49,7 +49,9 @@ export function AddColumnCard({
   if (!isOpen) {
     return (
       <Card onClick={() => setIsOpen(true)}>
+        <div style={{ width: 200, textAlign: 'center'}}>
         + Add column
+        </div>
       </Card>
     );
   }
@@ -60,6 +62,7 @@ export function AddColumnCard({
         autoFocus
         value={title}
         onChange={(e) => setTitle(e.target.value)}
+        style={{ width: 200}}
         onKeyDown={(e) => {
           if (e.key === 'Enter') handleSubmit();
           if (e.key === 'Escape') {

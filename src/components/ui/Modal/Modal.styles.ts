@@ -12,6 +12,7 @@ export const Overlay = styled.div`
 
 export const Container = styled.div`
   background: ${({ theme }) => theme.colors.surface};
+  color: ${({ theme }) => theme.colors.primary};
   border-radius: 8px;
   padding: 16px;
   width: 320px;

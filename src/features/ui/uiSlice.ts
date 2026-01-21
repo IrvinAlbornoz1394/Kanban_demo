@@ -3,7 +3,7 @@ import { createSlice } from '@reduxjs/toolkit';
 type ThemeMode = 'light' | 'dark';
 
 interface UIState {
-  theme: ThemeMode;
+  theme: 'light' | 'dark';
 }
 
 const initialState: UIState = {

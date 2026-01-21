@@ -3,6 +3,7 @@ import { HeaderWrapper, Title } from './Header.styles';
 import { toggleTheme } from '../../features/ui/uiSlice';
 import { useAppDispatch } from '../../app/hooks';
 import { CreateWorkspaceModal } from '../ui/CreateWorkspaceModal/CreateWorkspaceModal';
+import { Button } from '../../styles/components.styles';
 
 export function Header() {
   const dispatch = useAppDispatch();
@@ -14,13 +15,13 @@ export function Header() {
         <Title>Kanban</Title>
 
         <div style={{ display: 'flex', gap: '8px' }}>
-          <button onClick={() => setOpen(true)}>
+          <Button onClick={() => setOpen(true)}>
             + Create Workspace
-          </button>
+          </Button>
 
-          <button onClick={() => dispatch(toggleTheme())}>
+          <Button onClick={() => dispatch(toggleTheme())}>
             Toggle Theme
-          </button>
+          </Button>
         </div>
       </HeaderWrapper>
 

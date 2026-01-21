@@ -66,9 +66,25 @@ const boardsSlice = createSlice({
 
       const [moved] = board.columnIds.splice(oldIndex, 1);
       board.columnIds.splice(newIndex, 0, moved);
-    }
+    },
+    renameBoard(
+      state,
+      action: PayloadAction<{ boardId: string; name: string }>
+    ) {
+      const board = state.find((b) => b.id === action.payload.boardId);
+      if (!board) return;
+
+      board.name = action.payload.name;
+    },
+
+    removeBoard(
+      state,
+      action: PayloadAction<{ boardId: string }>
+    ) {
+      return state.filter((b) => b.id !== action.payload.boardId);
+    },
   },
 });
 
-export const { boardCreated, boardColumnsAssigned, addColumnToBoard, reorderColumns } = boardsSlice.actions;
+export const { boardCreated, boardColumnsAssigned, addColumnToBoard, reorderColumns, renameBoard, removeBoard } = boardsSlice.actions;
 export default boardsSlice.reducer;

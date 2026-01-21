@@ -124,7 +124,19 @@ const columnsSlice = createSlice({
           (id) => id !== action.payload.taskId
         );
       });
-    }
+    },
+    moveAllTasksToColumn(
+      state,
+      action: PayloadAction<{ fromColumnId: ID; toColumnId: ID }>
+    ) {
+      const fromColumn = state.entities[action.payload.fromColumnId];
+      const toColumn = state.entities[action.payload.toColumnId];
+      if (!fromColumn || !toColumn) return;
+
+      // Mover todas las tasks al final de la columna destino
+      toColumn.taskIds.push(...fromColumn.taskIds);
+      fromColumn.taskIds = [];
+    },
   },
 });
 
@@ -136,7 +148,8 @@ export const {
   removeTaskFromColumn,
   columnRenamed,
   taskMoved,
-  removeTaskEverywhere
+  removeTaskEverywhere,
+  moveAllTasksToColumn,
 } = columnsSlice.actions;
 
 export default columnsSlice.reducer;

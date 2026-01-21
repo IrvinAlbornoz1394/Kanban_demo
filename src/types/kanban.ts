@@ -21,11 +21,35 @@ export interface Column {
   isDefault: boolean;
 }
 
+export interface Tag {
+  id: string;
+  label: string;
+  color: string;
+}
+
+export interface Subtask {
+  id: string;
+  title: string;
+  completed: boolean;
+}
+
+export type TaskPriority = 'low' | 'medium' | 'high' | 'urgent';
+
 export interface Task {
   id: ID;
   columnId: ID;
-  title: string;
-  description?: string;
-  archived: boolean; 
+  boardId: ID;
+  title: string; // obligatorio, 3-100 caracteres
+  description?: string; // opcional, máx 1000 caracteres (markdown)
+  priority: TaskPriority;
+  dueDate?: string; // ISO string
+  tags?: Tag[];
+  createdAt: string; // ISO string
+  updatedAt: string; // ISO string
+  completedAt?: string; // ISO string
+  subtasks?: Subtask[];
+  estimatedHours?: number;
+  archived?: boolean;
+  // ...otras propiedades existentes si aplica...
 }
 

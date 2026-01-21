@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Modal } from '../Modal/Modal';
 import { useAppDispatch } from '../../../app/hooks';
 import { workspaceCreated } from '../../../features/workspaces/workspacesSlice';
+import { Button } from '../../../styles/components.styles';
 
 export function CreateWorkspaceModal({
   onClose,
@@ -29,7 +30,7 @@ export function CreateWorkspaceModal({
         style={{ width: '100%', marginBottom: '12px' }}
       />
 
-      <button onClick={handleCreate}>Create</button>
+      <Button onClick={handleCreate}>Create</Button>
     </Modal>
   );
 }

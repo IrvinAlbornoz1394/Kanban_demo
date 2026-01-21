@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Modal } from '../Modal/Modal';
 import { useAppDispatch } from '../../../app/hooks';
 import { createBoardWithDefaults } from '../../../features/boards/createBoardWithDefaults';
+import { Button } from '../../../styles/components.styles';
 
 export function CreateBoardModal({
   workspaceId,
@@ -31,9 +32,10 @@ export function CreateBoardModal({
         style={{ width: '100%', marginBottom: '12px' }}
       />
 
-      <button onClick={handleCreate}>
+      <Button
+       onClick={handleCreate}>
         Create board
-      </button>
+      </Button>
     </Modal>
   );
 }

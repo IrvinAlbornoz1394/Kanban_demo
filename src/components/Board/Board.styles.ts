@@ -18,4 +18,5 @@ export const BoardWrapper = styled.div`
   gap: 16px;
   padding: 16px;
   height: calc(100vh - 112px);
+  
 `;

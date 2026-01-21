@@ -1,6 +1,7 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { useAppSelector } from '../app/hooks';
 import { Board } from '../components/Board/Board';
+import Breadcrumb from '../components/layout/Breadcrumb';
 
 export function BoardPage() {
   const { boardId } = useParams<{ boardId: string }>();
@@ -19,5 +20,17 @@ export function BoardPage() {
     );
   }
 
-  return <Board boardId={boardId} />;
+  return (
+    <>
+      <Breadcrumb 
+        items={[
+          { label: 'Inicio', href: '/' },
+          { label: board.name }
+        ]} 
+      />
+      <div style={{ overflowX: 'auto', padding: '10px' }}>
+        <Board boardId={boardId} />
+      </div>
+    </>
+  );
 }
