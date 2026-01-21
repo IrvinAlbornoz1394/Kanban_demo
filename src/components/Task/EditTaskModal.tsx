@@ -2,7 +2,6 @@ import { useForm } from "react-hook-form";
 import type { Task } from "../../types/kanban";
 import { useEffect } from "react";
 import { SubtasksInput } from "./SubtasksInput";
-import { isBefore } from "date-fns";
 import { Modal } from "../ui/Modal/Modal";
 import { FormField } from "../ui/Form/FormField";
 import { Button, Input, Select, TextArea } from "../../styles/components.styles";
@@ -20,7 +19,6 @@ export function EditTaskModal({ task, onSave, onClose }: EditTaskModalProps) {
     handleSubmit,
     control,
     watch,
-    setValue,
     setError,
     formState: { errors, isDirty },
   } = useForm<Task>({

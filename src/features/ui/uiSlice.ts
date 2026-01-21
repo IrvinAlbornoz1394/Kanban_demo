@@ -1,7 +1,4 @@
 import { createSlice } from '@reduxjs/toolkit';
-
-type ThemeMode = 'light' | 'dark';
-
 interface UIState {
   theme: 'light' | 'dark';
 }

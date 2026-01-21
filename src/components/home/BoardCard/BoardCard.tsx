@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import type { Board } from '../../../types/kanban';
-import { BoardMenu, Card } from './BoardCard.styles';
+import { Card } from './BoardCard.styles';
 import { CreateBoardModal } from '../../ui/CreateBoardModal/CreateBoardModal';
 import { Modal } from '../../ui/Modal/Modal';
 import { useAppDispatch } from '../../../app/hooks';

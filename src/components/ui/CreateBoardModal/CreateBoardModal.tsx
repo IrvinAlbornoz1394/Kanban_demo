@@ -5,7 +5,6 @@ import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import { createBoardWithDefaults } from '../../../features/boards/createBoardWithDefaults';
 import { Button, Input } from '../../../styles/components.styles';
 import { FormField } from '../Form/FormField';
-import { useToastContext } from '../Toast/ToastProvider';
 
 export function CreateBoardModal({
   workspaceId,
@@ -19,7 +18,6 @@ export function CreateBoardModal({
   const boards = useAppSelector(state => state.boards);
   const [name, setName] = useState('');
   const [error, setError] = useState<string | null>(null);
-  const { showToast } = useToastContext();
 
   function handleCreate() {
     const trimmed = name.trim();

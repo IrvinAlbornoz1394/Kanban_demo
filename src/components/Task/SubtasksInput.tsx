@@ -12,12 +12,12 @@ export function SubtasksInput({ control, name }: SubtasksInputProps) {
   const { fields, append, remove, update } = useFieldArray({ control, name });
 
   // Local state for debounced title values
-  const [localTitles, setLocalTitles] = useState(() => fields.map(f => f.title));
-  const debounceTimeouts = useRef<(NodeJS.Timeout | null)[]>([]);
+  const [localTitles, setLocalTitles] = useState(() => fields.map(f => (f as any).title));
+  const debounceTimeouts = useRef<(number | null)[]>([]);
 
   // Keep localTitles in sync if fields change (e.g., add/remove)
   useEffect(() => {
-    setLocalTitles(fields.map(f => f.title));
+    setLocalTitles(fields.map(f => (f as any).title));
   }, [fields.length]);
 
   // Clean up timeouts on unmount

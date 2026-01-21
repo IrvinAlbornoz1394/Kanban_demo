@@ -17,12 +17,12 @@ export function TagsInput({ control, name }: TagsInputProps) {
   const { fields, append, remove, update } = useFieldArray({ control, name, keyName: 'fieldId' });
 
   // Local state for debounced label values
-  const [localLabels, setLocalLabels] = useState(() => fields.map(f => f.label));
-  const debounceTimeouts = useRef<(NodeJS.Timeout | null)[]>([]);
+  const [localLabels, setLocalLabels] = useState(() => fields.map(f => (f as any).label));
+  const debounceTimeouts = useRef<(number | null)[]>([]);
 
   // Keep localLabels in sync if fields change (e.g., add/remove)
   useEffect(() => {
-    setLocalLabels(fields.map(f => f.label));
+    setLocalLabels(fields.map(f => (f as any).label));
   }, [fields.length]);
 
   // Clean up timeouts on unmount
@@ -45,11 +45,11 @@ export function TagsInput({ control, name }: TagsInputProps) {
   };
 
   // Local state for color values
-  const [localColors, setLocalColors] = useState(() => fields.map(f => f.color));
+  const [localColors, setLocalColors] = useState(() => fields.map(f => (f as any).color));
 
   // Keep localColors in sync if fields change (e.g., add/remove)
   useEffect(() => {
-    setLocalColors(fields.map(f => f.color));
+    setLocalColors(fields.map(f => (f as any).color));
   }, [fields.length]);
 
   const handleColorChange = (idx: number, value: string) => {
@@ -61,7 +61,8 @@ export function TagsInput({ control, name }: TagsInputProps) {
   };
 
   const handleColorBlur = (idx: number) => {
-    if (localColors[idx] !== fields[idx].color) {
+    const tempFields: any[] = [...fields];
+    if (localColors[idx] !== tempFields[idx].color) {
       update(idx, { ...fields[idx], color: localColors[idx] });
     }
   };
