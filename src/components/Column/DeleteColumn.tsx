@@ -33,8 +33,8 @@ const DeleteColumn = ({ selectedColumn, setSelectedColumn, setDeleteOpen, active
         ) : (
         <p>Esta acción no se puede deshacer.</p>
         )}
-        <Button style={{ color: 'red' }} onClick={handleConfirmDelete}>
-        Eliminar columna
+        <Button style={{ color: 'red', marginRight: 10 }} onClick={handleConfirmDelete}>
+          Eliminar columna
         </Button>
         <Button onClick={() => setDeleteOpen(false)}>Cancelar</Button>
     </Modal>

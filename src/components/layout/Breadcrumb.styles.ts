@@ -3,10 +3,17 @@ import styled from 'styled-components'
 export const BreadcrumbContainer = styled.nav`
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 16px;
   padding: 12px 22px;
   font-size: 14px;
-`
+`;
+
+export const BreadcrumbRight = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 12px;
+`;
 
 export const BreadcrumbList = styled.ol`
   display: flex;

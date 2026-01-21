@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import type { Column as ColumnType, Task as TaskType } from '../../types/kanban';
-import { ColumnWrapper, ColumnTitle, ColumnHeader } from './Column.styles';
+import { ColumnWrapper, ColumnTitle, ColumnHeader, TasksScrollArea } from './Column.styles';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { deleteTask } from '../../features/tasks/tasksSlice';
 import {
@@ -18,12 +18,14 @@ import { SortableTask } from '../Task/SortableTask';
 import DeleteColumn from './DeleteColumn';
 import AddTask from './AddTask';
 import { Button } from '../../styles/components.styles';
+import DeleteIcon from '../ui/Icons/DeleteIcon';
 
 interface Props {
   column: ColumnType;
   tasks: TaskType[];
   dragHandleProps?: React.HTMLAttributes<HTMLDivElement>;
 }
+
 
 export function Column({ column, tasks, dragHandleProps }: Props) {
   const dispatch = useAppDispatch();
@@ -41,6 +43,10 @@ export function Column({ column, tasks, dragHandleProps }: Props) {
   const [selectedColumn, setSelectedColumn] = useState<string>(''); // columna destino
   const activeTasks = tasks.filter((t) => !t.archived);
 
+  // Paginación/carga incremental
+  const [visibleCount, setVisibleCount] = useState(10);
+  const visibleTasks = activeTasks.slice(0, visibleCount);
+  const hasMore = visibleCount < activeTasks.length;
 
   function handleRename() {
     if (!columnTitle.trim()) return;
@@ -127,8 +133,8 @@ export function Column({ column, tasks, dragHandleProps }: Props) {
         <div style={{ display: 'flex', gap: '6px' }}>
           <b>{tasks.length}</b>
           {!column.isDefault && (
-            <Button onClick={handleDeleteColumn}>
-              ✕
+            <Button variant="icon" onClick={handleDeleteColumn}>
+              <DeleteIcon />
             </Button>
           )}
         </div>
@@ -148,26 +154,26 @@ export function Column({ column, tasks, dragHandleProps }: Props) {
       )}
 
       {/* Tasks */}
-      <div
-        style={{
-          flex: 1,
-          minHeight: '40px',
-          paddingTop: '8px',
-        }}
-      >
+      <TasksScrollArea>
         <SortableContext
-          items={activeTasks.map((t) => t.id)}
+          items={visibleTasks.map((t) => t.id)}
           strategy={verticalListSortingStrategy}
         >
-          {activeTasks.map((task) => (
+          {visibleTasks.map((task) => (
             <SortableTask key={task.id} task={task} />
           ))}
-
-          
+          {hasMore && (
+            <button
+              style={{ width: '100%', margin: '8px 0', padding: 8, borderRadius: 4, border: '1px solid #ccc', background: '#f5f6fa', cursor: 'pointer' }}
+              onClick={() => setVisibleCount((c) => c + 10)}
+            >
+              Cargar más tareas
+            </button>
+          )}
           {/* Crear task */}
           <AddTask column={column} />
         </SortableContext>
-      </div>
+      </TasksScrollArea>
     </ColumnWrapper>
   );
 }

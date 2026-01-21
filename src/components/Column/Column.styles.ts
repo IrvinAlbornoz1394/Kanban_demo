@@ -7,13 +7,23 @@ export const ColumnWrapper = styled.div`
   width: 260px;
   display: flex;
   flex-direction: column;
-  height: 100%;
+  max-height: 80vh;
+  min-height: 300px;
+  height: auto;
   .drag-handle {
     height: 6px;
     background: var(--accent);
     cursor: grab;
     border-radius: 8px 8px 0 0;
   }
+`;
+
+export const TasksScrollArea = styled.div`
+  flex: 1;
+  min-height: 40px;
+  padding-top: 8px;
+  overflow-y: auto;
+  max-height: 60vh;
 `;
 
 export const ColumnHeader = styled.div`

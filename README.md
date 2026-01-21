@@ -1,3 +1,65 @@
+# Kanban Demo
+
+> Aplicación Kanban desarrollada con React, TypeScript, Vite y Redux Toolkit.
+
+## Descripción
+
+Esta aplicación permite gestionar tableros, columnas y tareas al estilo Kanban. Permite crear, editar y eliminar boards, columnas y tareas, así como organizar tareas mediante drag & drop. Incluye persistencia local y pruebas automatizadas.
+
+## Tecnologías principales
+
+- React 18
+- TypeScript
+- Vite
+- Redux Toolkit
+- styled-components
+- Jest
+- ESLint
+
+## Instalación y uso
+
+1. Clona el repositorio:
+  ```bash
+  git clone <url-del-repo>
+  cd Kanban_demo
+  ```
+2. Instala las dependencias:
+  ```bash
+  npm install
+  ```
+3. Inicia la aplicación en modo desarrollo:
+  ```bash
+  npm run dev
+  ```
+4. Abre [http://localhost:5173](http://localhost:5173) en tu navegador.
+
+## Scripts útiles
+
+- `npm run dev` – Inicia el servidor de desarrollo
+- `npm run build` – Genera la build de producción
+- `npm run test` – Ejecuta las pruebas
+
+## Estructura del proyecto
+
+```
+src/
+  app/            # Configuración de store y hooks
+  components/     # Componentes reutilizables (Board, Column, Task, UI, etc.)
+  features/       # Slices de Redux para boards, columns, tasks, ui, workspaces
+  hooks/          # Custom hooks
+  pages/          # Páginas principales (BoardPage, etc.)
+  styles/         # Estilos globales y theming
+  types/          # Tipos TypeScript
+  utils/          # Utilidades
+```
+
+## Pruebas
+
+Las pruebas están ubicadas en `src/__tests__/`. Ejecuta `npm run test` para correrlas con Jest.
+
+## Créditos
+
+Desarrollado por Irvin. Basado en buenas prácticas de React y Redux.
 # React + TypeScript + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.

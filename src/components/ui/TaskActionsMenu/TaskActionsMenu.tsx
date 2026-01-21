@@ -2,6 +2,8 @@ import { useState } from "react";
 import { duplicateTaskAndAddToColumn } from "../../../features/tasks/tasksSlice";
 import type { Task } from "../../../types/kanban";
 import { useAppDispatch } from "../../../app/hooks";
+// import { Button } from "../../../styles/components.styles";
+import { MenuContext } from "./TaskActionsMenu.styles";
 import { Button } from "../../../styles/components.styles";
 
 interface TaskActionsMenuProps {
@@ -23,56 +25,49 @@ export function TaskActionsMenu({ onEdit, onArchive, onDelete, showArchive, task
 
   return (
     <div style={{ position: "relative" }}>
-      <button
-        type="button"
+      <Button
+        variant="icon"
         onClick={() => setOpen((v) => !v)}
-        style={{ background: "none", border: "none", cursor: "pointer", fontSize: 18 }}
         aria-label="Abrir menú de acciones"
       >
         ⋮
-      </button>
+      </Button>
       {open && (
-        <div
-          style={{
-            position: "absolute",
-            right: 0,
-            top: 28,
-            background: "#fff",
-            border: "1px solid #ddd",
-            borderRadius: 6,
-            boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
-            zIndex: 10,
-            minWidth: 120,
-            padding: 4,
-          }}
-        >
-          <Button type="button" onClick={() => { onEdit(); setOpen(false); }} style={menuBtnStyle}>
-            Editar
-          </Button>
-          {showArchive && (
-            <Button type="button" onClick={() => { onArchive?.(); setOpen(false); }} style={menuBtnStyle}>
-              Archivar
-            </Button>
-          )}
-          <Button type="button" onClick={() => { onDelete(); setOpen(false); }} style={{ ...menuBtnStyle, color: "#d32f2f" }}>
-            Eliminar
-          </Button>
-          <Button type="button" onClick={handleDuplicate} style={menuBtnStyle}>
-            Duplicar tarea
-          </Button>
-        </div>
+        <MenuContext>
+          <ul>
+            <li
+              tabIndex={0}
+              onClick={() => { onEdit(); setOpen(false); }}
+              onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { onEdit(); setOpen(false); }}}
+            >
+              Editar
+            </li>
+            {showArchive && (
+              <li
+                tabIndex={0}
+                onClick={() => { onArchive?.(); setOpen(false); }}
+                onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { onArchive?.(); setOpen(false); }}}
+              >
+                Archivar
+              </li>
+            )}
+            <li
+              tabIndex={0}
+              onClick={() => { onDelete(); setOpen(false); }}
+              onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { onDelete(); setOpen(false); }}}
+            >
+              Eliminar
+            </li>
+            <li
+              tabIndex={0}
+              onClick={handleDuplicate}
+              onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { handleDuplicate(); }}}
+            >
+              Duplicar tarea
+            </li>
+          </ul>
+        </MenuContext>
       )}
     </div>
   );
 }
-
-const menuBtnStyle = {
-  display: "block",
-  width: "100%",
-  background: "none",
-  border: "none",
-  textAlign: "left" as const,
-  padding: "8px 12px",
-  cursor: "pointer",
-  fontSize: 15,
-};

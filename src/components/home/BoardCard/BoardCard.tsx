@@ -7,6 +7,7 @@ import { Modal } from '../../ui/Modal/Modal';
 import { useAppDispatch } from '../../../app/hooks';
 import { renameBoard, removeBoard } from '../../../features/boards/boardsSlice';
 import { Button } from '../../../styles/components.styles';
+import { MenuContext } from '../../ui/TaskActionsMenu/TaskActionsMenu.styles';
 
 interface Props {
   board?: Board;
@@ -58,40 +59,35 @@ export function BoardCard({ board, isAdd, workspaceId }: Props) {
   if (board) {
     return (
       <Card style={{ position: 'relative' }}>
-        <button
-          style={{
-            background: 'transparent',
-            zIndex: 1,
-            border: 'none',
-            cursor: 'pointer',
-            fontSize: '20px',
-            position: 'absolute',
-            top: '8px',
-            right: '8px'
-          }}
+        <Button
+          variant="icon"
+          aria-label="Open board menu"
           onClick={() => setMenuOpen((v) => !v)}
+          style={{ position: 'absolute', top: 8, right: 8 }}
         >
           ⋮
-        </button>
+        </Button>
         {menuOpen && (
-          <BoardMenu>
-            <div
-              onClick={() => {
-                setEditOpen(true);
-                setMenuOpen(false);
-              }}
-            >
-              Editar nombre
-            </div>
-            <div
-              onClick={() => {
-                setDeleteOpen(true);
-                setMenuOpen(false);
-              }}
-            >
-              Eliminar
-            </div>
-          </BoardMenu>
+          <MenuContext>
+            <ul>
+              <li
+                onClick={() => {
+                  setEditOpen(true);
+                  setMenuOpen(false);
+                }}
+              >
+                Editar nombre
+              </li>
+              <li
+                onClick={() => {
+                  setDeleteOpen(true);
+                  setMenuOpen(false);
+                }}
+              >
+                Eliminar
+              </li>
+            </ul>
+          </MenuContext>
         )}
 
         <div onClick={() => navigate(`/boards/${board.id}`)} style={{ width: '100%', paddingTop: 20 }}>{board.name}</div>

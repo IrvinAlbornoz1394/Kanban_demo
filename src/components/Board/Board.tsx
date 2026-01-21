@@ -14,8 +14,9 @@ import { SortableColumn } from '../Column/SortableColumn';
 import { taskMoved } from '../../features/columns/columnsSlice';
 import { taskColumnChanged } from '../../features/tasks/tasksSlice';
 import { reorderColumns } from '../../features/boards/boardsSlice';
+import type { TaskFormFilterValues } from '../Task/TaskFormFilter';
 
-export function Board({ boardId }: { boardId: string }) {
+export function Board({ boardId, filter }: { boardId: string, filter?: TaskFormFilterValues }) {
   const dispatch = useAppDispatch();
 
   const board = useAppSelector((state) =>
@@ -112,9 +113,28 @@ export function Board({ boardId }: { boardId: string }) {
             const column = columns.entities[columnId];
             if (!column) return null;
 
-            const columnTasks = column.taskIds
+            let columnTasks = column.taskIds
               .map((taskId) => tasks.entities[taskId])
               .filter((task) => task && !task.archived);
+
+            // Filtrado por los filtros activos
+            if (filter) {
+              columnTasks = columnTasks.filter(task => {
+                if (!task) return false;
+                // Texto
+                const text = filter.search.trim().toLowerCase();
+                if (text && !(
+                  task.title.toLowerCase().includes(text) ||
+                  (task.description?.toLowerCase().includes(text))
+                )) return false;
+                // Prioridad
+                if (filter.priority && task.priority !== filter.priority) return false;
+                // Fechas
+                if (filter.dueDateStart && (!task.dueDate || task.dueDate < filter.dueDateStart)) return false;
+                if (filter.dueDateEnd && (!task.dueDate || task.dueDate > filter.dueDateEnd)) return false;
+                return true;
+              });
+            }
 
             return (
               <SortableColumn

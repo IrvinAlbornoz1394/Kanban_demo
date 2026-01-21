@@ -9,6 +9,7 @@ import App from './App';
 import { GlobalStyles } from './styles/globalStyles';
 import { lightTheme, darkTheme } from './styles/theme';
 import { useAppSelector } from './app/hooks';
+import { ToastProvider } from './components/ui/Toast/ToastProvider';
 
 function ThemedApp() {
   const themeMode = useAppSelector((state) => state.ui.theme);
@@ -28,7 +29,9 @@ ReactDOM.createRoot(
 ).render(
   <React.StrictMode>
     <Provider store={store}>
-      <ThemedApp />
+      <ToastProvider>
+        <ThemedApp />
+      </ToastProvider>
     </Provider>
   </React.StrictMode>
 );

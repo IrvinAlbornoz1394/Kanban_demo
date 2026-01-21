@@ -5,7 +5,8 @@ import { SubtasksInput } from "./SubtasksInput";
 import { isBefore } from "date-fns";
 import { Modal } from "../ui/Modal/Modal";
 import { FormField } from "../ui/Form/FormField";
-import { Button } from "../../styles/components.styles";
+import { Button, Input, Select, TextArea } from "../../styles/components.styles";
+import { TagsInput } from "./TagsInput";
 
 interface EditTaskModalProps {
   task: Task;
@@ -20,6 +21,7 @@ export function EditTaskModal({ task, onSave, onClose }: EditTaskModalProps) {
     control,
     watch,
     setValue,
+    setError,
     formState: { errors, isDirty },
   } = useForm<Task>({
     defaultValues: task,
@@ -29,10 +31,15 @@ export function EditTaskModal({ task, onSave, onClose }: EditTaskModalProps) {
   // Validación de fecha de vencimiento
   const dueDate = watch("dueDate");
   useEffect(() => {
-    if (dueDate && isBefore(new Date(dueDate), new Date())) {
-      setValue("dueDate", "");
+    if (dueDate) {
+      const today = new Date();
+      today.setHours(0,0,0,0);
+      const inputDate = new Date(dueDate);
+      if (inputDate < today) {
+        setError("dueDate", { type: "manual", message: "La fecha no puede ser pasada" });
+      }
     }
-  }, [dueDate, setValue]);
+  }, [dueDate, setError]);
 
   return (
     <Modal onClose={onClose} style={{ maxWidth: '400px', width: '100%' }}>
@@ -47,7 +54,7 @@ export function EditTaskModal({ task, onSave, onClose }: EditTaskModalProps) {
           htmlFor="title"
           error={errors.title?.message}
         >
-          <input
+          <Input
             id="title"
             {...register("title", {
               required: "El título es obligatorio",
@@ -65,18 +72,18 @@ export function EditTaskModal({ task, onSave, onClose }: EditTaskModalProps) {
           htmlFor="description"
           error={errors.description?.message}
         >
-          <textarea
+          <TextArea
             id="description"
             {...register("description", {
-              maxLength: { value: 1000, message: "Máximo 1000 caracteres" },
+              maxLength: { value: 100, message: "Máximo 100 caracteres" },
             })}
-            placeholder="Descripción (markdown soportado)"
+            placeholder="Descripción (máx. 100 caracteres)"
             style={{ width: "100%", minHeight: 60 }}
           />
         </FormField>
 
         <FormField label="Prioridad" htmlFor="priority">
-          <select
+          <Select
             id="priority"
             {...register("priority", { required: true })}
             style={{ width: "100%" }}
@@ -85,7 +92,7 @@ export function EditTaskModal({ task, onSave, onClose }: EditTaskModalProps) {
             <option value="medium">Media</option>
             <option value="high">Alta</option>
             <option value="urgent">Urgente</option>
-          </select>
+          </Select>
         </FormField>
 
         <FormField
@@ -93,12 +100,17 @@ export function EditTaskModal({ task, onSave, onClose }: EditTaskModalProps) {
           htmlFor="dueDate"
           error={errors.dueDate?.message}
         >
-          <input
+          <Input
             id="dueDate"
             type="date"
             {...register("dueDate", {
-              validate: (value) =>
-                !value || new Date(value) >= new Date() || "No puede ser pasada",
+              validate: (value) => {
+                if (!value) return true;
+                const today = new Date();
+                today.setHours(0,0,0,0);
+                const inputDate = new Date(value);
+                return inputDate >= today || "La fecha no puede ser pasada";
+              }
             })}
             style={{ width: "100%" }}
           />
@@ -109,7 +121,7 @@ export function EditTaskModal({ task, onSave, onClose }: EditTaskModalProps) {
           htmlFor="estimatedHours"
           error={errors.estimatedHours?.message}
         >
-          <input
+          <Input
             id="estimatedHours"
             type="number"
             step="0.1"
@@ -125,6 +137,11 @@ export function EditTaskModal({ task, onSave, onClose }: EditTaskModalProps) {
         {/* <FormField label="Etiquetas">
           <TagsInput control={control} name="tags" />
         </FormField> */}
+
+
+        <FormField label="Etiquetas">
+          <TagsInput control={control} name="tags" />
+        </FormField>
 
         <FormField label="Subtareas">
           <SubtasksInput control={control} name="subtasks" />
