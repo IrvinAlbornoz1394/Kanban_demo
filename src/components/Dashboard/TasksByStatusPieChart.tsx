@@ -2,6 +2,7 @@ import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer, Legend } from 'recha
 import { useAppSelector } from '../../app/hooks';
 import { useSearchParams } from 'react-router-dom';
 import { generateColors } from '../../utils/funtions';
+import { format, parseISO } from 'date-fns';
 import type { Column } from '../../types/kanban';
 
 export function TasksByStatusPieChart() {
@@ -39,30 +40,33 @@ export function TasksByStatusPieChart() {
   });
 
   Object.values(tasks).forEach(task => {
-    
     if (boardId && task.boardId !== boardId) return;
-    console.log('Pasa filtro boardId');
     if (!boardId && workspaceId) {
-      console.log('Pasa filtro workspaceId');
       const board = boards.find(b => b.id === task.boardId);
-      console.log('board:', board);
       if (!board || board.workspaceId !== workspaceId) return;
     }
-    if (dateEnd && task.createdAt > dateEnd) return;
+
+    // Formatear fechas para comparar solo el día
+    const createdAtDay = format(parseISO(task.createdAt), 'yyyy-MM-dd');
+    const filterStartDay = dateStart;
+    const filterEndDay = dateEnd;
 
     let colId: string | null = null;
     if (task.columnHistory && task.columnHistory.length > 0) {
-      // Busca la entrada más reciente en el rango
       const lastEntry = [...task.columnHistory]
-        .filter(entry =>
+        .filter(entry => {
+          const enteredDay = format(parseISO(entry.enteredAt), 'yyyy-MM-dd');
+          const exitedDay = entry.exitedAt ? format(parseISO(entry.exitedAt), 'yyyy-MM-dd') : null;
           // La tarea estuvo en la columna en algún momento dentro del rango
-          entry.enteredAt <= dateEnd &&
-          (!entry.exitedAt || entry.exitedAt >= dateStart)
-        )
+          return (
+            enteredDay <= filterEndDay &&
+            (!exitedDay || exitedDay >= filterStartDay)
+          );
+        })
         .sort((a, b) => b.enteredAt.localeCompare(a.enteredAt))[0];
       if (lastEntry) colId = lastEntry.columnId;
     }
-    if (!colId && task.createdAt <= dateEnd && task.createdAt >= dateStart) colId = task.columnId;
+    if (!colId && createdAtDay <= filterEndDay && createdAtDay >= filterStartDay) colId = task.columnId;
 
     if (!colId) return;
 
