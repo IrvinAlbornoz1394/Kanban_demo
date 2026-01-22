@@ -38,6 +38,7 @@ export type TaskPriority = 'low' | 'medium' | 'high' | 'urgent';
 export interface Task {
   id: ID;
   columnId: ID;
+  columnName: string;
   boardId: ID;
   title: string; // obligatorio, 3-100 caracteres
   description?: string; // opcional, máx 1000 caracteres (markdown)
@@ -50,14 +51,13 @@ export interface Task {
   subtasks?: Subtask[];
   estimatedHours?: number;
   archived?: boolean;
-  columnHistory?: ColumnHistoryEntry[]; // <--- Nuevo campo
-  // ...otras propiedades existentes si aplica...
+  columnHistory?: ColumnHistoryEntry[]; 
 }
 
 export interface ColumnHistoryEntry {
   columnId: ID;
-  columnName?: string; // <--- Nuevo campo opcional
-  enteredAt: string; // ISO string
-  exitedAt?: string; // ISO string, undefined si sigue en la columna
+  columnName?: string; 
+  enteredAt: string; 
+  exitedAt?: string; 
 }
 

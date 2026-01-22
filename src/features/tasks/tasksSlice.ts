@@ -29,6 +29,7 @@ const tasksSlice = createSlice({
         const baseTask: Task = {
           id: crypto.randomUUID(),
           columnId,
+          columnName,
           boardId,
           title,
           priority: 'medium',
@@ -149,7 +150,7 @@ export const duplicateTaskAndAddToColumn =
     const columnName = column?.title ?? '';
 
     //Crea la nueva tarea usando addTask
-    const action = addTask(task.columnId, columnName, task.title);
+    const action = addTask(task.columnId, task.boardId, columnName, task.title);
     dispatch(action);
 
     const newTaskId = action.payload.id;

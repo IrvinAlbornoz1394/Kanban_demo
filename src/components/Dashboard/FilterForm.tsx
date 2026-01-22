@@ -5,6 +5,22 @@ import { useSearchParams } from 'react-router-dom';
 import { PREDEFINED_RANGES, getRangeDates } from '../../utils/filterRanges';
 
 export function FilterForm() {
+    // Al montar, si no hay fechas en la URL, establecer por defecto últimos 7 días
+    useEffect(() => {
+      const hasDateStart = searchParams.get('dateStart');
+      const hasDateEnd = searchParams.get('dateEnd');
+      if (!hasDateStart || !hasDateEnd) {
+        const { start, end } = getRangeDates('last7days');
+        setSearchParams(params => {
+          const newParams = new URLSearchParams(params);
+          newParams.set('dateStart', start);
+          newParams.set('dateEnd', end);
+          newParams.set('dateRange', 'last7days');
+          return newParams;
+        });
+      }
+      // eslint-disable-next-line
+    }, []);
   const [searchParams, setSearchParams] = useSearchParams();
 
   const initialRange = searchParams.get('dateRange') || 'last7days';
@@ -72,19 +88,19 @@ export function FilterForm() {
   }
 
   function handleClear() {
+    const { start, end } = getRangeDates('last7days');
     setWorkspaceId('');
     setBoardId('');
-    setDateStart(initialDates.start);
-    setDateEnd(initialDates.end);
+    setDateStart(start);
+    setDateEnd(end);
     setDateRange('last7days');
-    setSearchParams({});
+    setSearchParams({ dateStart: start, dateEnd: end, dateRange: 'last7days' });
   }
 
   const showClear = Boolean(
     searchParams.get('workspaceId') ||
     searchParams.get('boardId') ||
-    searchParams.get('dateStart') ||
-    searchParams.get('dateEnd')
+    (searchParams.get('dateRange') && searchParams.get('dateRange') !== 'last7days')
   );
 
   return (
@@ -117,7 +133,7 @@ export function FilterForm() {
       <Button type="submit">Filtrar</Button>
       {showClear && (
         <Button type="button" onClick={handleClear} variant="outline">
-          Limpiar
+          Reiniciar filtro
         </Button>
       )}
     </form>

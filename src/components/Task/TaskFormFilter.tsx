@@ -29,7 +29,6 @@ const TaskFormFilter: React.FC<TaskFormFilterProps> = ({ values, onChange, onSub
     defaultValues: values,
   });
 
-  // Sync react-hook-form state with parent onChange
   React.useEffect(() => {
     const subscription = watch((val) => {
       onChange(val as TaskFormFilterValues);
@@ -37,7 +36,6 @@ const TaskFormFilter: React.FC<TaskFormFilterProps> = ({ values, onChange, onSub
     return () => subscription.unsubscribe();
   }, [watch, onChange]);
 
-  // Update form if values prop changes (e.g. from URL)
   React.useEffect(() => {
     setValue('search', values.search);
     setValue('priority', values.priority);
@@ -49,7 +47,6 @@ const TaskFormFilter: React.FC<TaskFormFilterProps> = ({ values, onChange, onSub
     if (onSubmit) onSubmit(data);
   };
 
-  // Show clear button only if any value in the URL (values prop) is set
   const isFiltered = Boolean(
     values.search || values.priority || values.dueDateStart || values.dueDateEnd
   );

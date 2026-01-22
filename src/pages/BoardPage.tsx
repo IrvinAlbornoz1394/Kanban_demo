@@ -58,6 +58,10 @@ export function BoardPage() {
       <div style={{ overflowX: 'auto', padding: '10px' }}>
         <Board boardId={boardId} filter={filterDefaults} />
       </div>
+
+      <button onClick={() => navigate('/workspaces')}>
+        ← Volver a Workspaces
+      </button>
     </>
   );
 }

@@ -1,6 +1,24 @@
+export const Table = styled.table`
+  width: 100%;
+  border-collapse: collapse;
+  margin: 16px 0;
+  font-size: 14px;
+  background: ${({ theme }) => theme.colors.white};
+  th, td {
+    border: 1px solid ${({ theme }) => theme.colors.border};
+    padding: 8px 12px;
+    text-align: left;
+  }
+  th {
+    background: ${({ theme }) => theme.colors.background};
+    font-weight: 600;
+  }
+  tr:nth-child(even) {
+    background: ${({ theme }) => theme.colors.backgroundAlt || '#f9f9f9'};
+  }
+`;
 import styled, { css } from "styled-components";
 
-// Button variants: primary, secondary, success, error, warning, info, outline, icon
 const variantStyles = {
   primary: css`
     background-color: ${({ theme }) => theme.colors.primary};
@@ -89,7 +107,6 @@ export const Button = styled.button<{
     `}
   `;
 
-// Icon-only button (for delete/remove, etc.)
 export const ButtonIcon = styled.button`
   background: none;
   border: none;

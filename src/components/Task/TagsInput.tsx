@@ -9,10 +9,6 @@ interface TagsInputProps {
   name: string;
 }
 
-const COLORS = [
-  "#e57373", "#f06292", "#ba68c8", "#64b5f6", "#4db6ac", "#ffd54f", "#ffb74d", "#a1887f"
-];
-
 export function TagsInput({ control, name }: TagsInputProps) {
   const { fields, append, remove, update } = useFieldArray({ control, name, keyName: 'fieldId' });
 
@@ -94,7 +90,7 @@ export function TagsInput({ control, name }: TagsInputProps) {
         ))}
         <Button
           variant="outline"
-          onClick={() => append({ id: crypto.randomUUID(), label: "", color: COLORS[0] })}
+          onClick={() => append({ id: crypto.randomUUID(), label: "", color: "#e57373" })}
         >
           + Añadir etiqueta
         </Button>

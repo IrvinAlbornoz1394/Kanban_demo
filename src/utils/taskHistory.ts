@@ -11,21 +11,24 @@ export function updateTaskColumnHistory(task: Task, action: HistoryAction): Task
   let history: ColumnHistoryEntry[] = task.columnHistory ? [...task.columnHistory] : [];
 
   switch (action.type) {
-    case 'create':
+    case 'create': {
       history.push({
         columnId: action.columnId,
         columnName: action.columnName,
         enteredAt: action.now,
       });
+      // Si la columna es 'done', marca como completada
+      const isDone = action.columnName?.trim().toLowerCase() === 'done';
       return {
         ...task,
         columnId: action.columnId,
         columnHistory: history,
         createdAt: action.now,
         updatedAt: action.now,
+        completedAt: isDone ? action.now : task.completedAt,
       };
-
-    case 'move':
+    }
+    case 'move': {
       if (history.length > 0 && !history[history.length - 1].exitedAt) {
         history[history.length - 1].exitedAt = action.now;
       }
@@ -34,14 +37,20 @@ export function updateTaskColumnHistory(task: Task, action: HistoryAction): Task
         columnName: action.toColumnName,
         enteredAt: action.now,
       });
+      // Si la columna destino es 'done' y antes no estaba en 'done', marca como completada
+      const isDone = action.toColumnName?.trim().toLowerCase() === 'done';
+      const wasDone = task.columnName?.trim().toLowerCase() === 'done';
+      const shouldSetCompleted = isDone && !wasDone;
       return {
         ...task,
         columnId: action.toColumnId,
+        columnName: action.toColumnName,
         columnHistory: history,
         updatedAt: action.now,
+        completedAt: shouldSetCompleted ? action.now : task.completedAt,
       };
-
-    case 'archive':
+    }
+    case 'archive': {
       if (history.length > 0 && !history[history.length - 1].exitedAt) {
         history[history.length - 1].exitedAt = action.now;
       }
@@ -51,8 +60,8 @@ export function updateTaskColumnHistory(task: Task, action: HistoryAction): Task
         updatedAt: action.now,
         columnHistory: history,
       };
-
-    case 'moveOnColumnDelete':
+    }
+    case 'moveOnColumnDelete': {
       if (history.length > 0 && !history[history.length - 1].exitedAt) {
         history[history.length - 1].exitedAt = action.now;
       }
@@ -61,12 +70,17 @@ export function updateTaskColumnHistory(task: Task, action: HistoryAction): Task
         columnName: action.toColumnName,
         enteredAt: action.now,
       });
+      // Si la columna destino es 'done', marca como completada
+      const isDone = action.toColumnName?.trim().toLowerCase() === 'done';
       return {
         ...task,
         columnId: action.toColumnId,
+        columnName: action.toColumnName,
         columnHistory: history,
         updatedAt: action.now,
+        completedAt: isDone ? action.now : task.completedAt,
       };
+    }
   }
 }
 
