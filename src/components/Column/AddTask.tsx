@@ -1,4 +1,3 @@
-
 import { useState } from 'react'
 import { addTask } from '../../features/tasks/tasksSlice';
 import { taskAddedToColumn } from '../../features/columns/columnsSlice';
@@ -28,7 +27,7 @@ const AddTask = ({ column }: AddTaskProps) => {
             return;
         }
         setError(null);
-        const action = addTask(column.id, title.trim());
+        const action = addTask(column.id, column.boardId, column.title, title.trim());
         dispatch(action);
         dispatch(
           taskAddedToColumn({

@@ -90,10 +90,12 @@ export function Board({ boardId, filter }: { boardId: string, filter?: TaskFormF
     );
 
     if (fromColumnId !== toColumnId) {
+      const toColumn = columns.entities[toColumnId];
       dispatch(
         taskColumnChanged({
           taskId: activeId,
           columnId: toColumnId,
+          columnName: toColumn?.title ?? '',
         })
       );
     }

@@ -19,6 +19,8 @@ import DeleteColumn from './DeleteColumn';
 import AddTask from './AddTask';
 import { Button } from '../../styles/components.styles';
 import DeleteIcon from '../ui/Icons/DeleteIcon';
+import { moveTasksOnColumnDelete } from '../../utils/taskHistory';
+import { updateTask } from '../../features/tasks/tasksSlice'; // Importa el action creator
 
 interface Props {
   column: ColumnType;
@@ -74,13 +76,22 @@ export function Column({ column, tasks, dragHandleProps }: Props) {
           dispatch(removeTaskEverywhere({ taskId }));
         });
       } else {
-        // Mover tasks a columna destino
+        // Mover tasks a columna destino y actualizar historial
+        const toColumn = columns[selectedColumn];
+        moveTasksOnColumnDelete(
+          activeTasks,
+          column,
+          toColumn,
+          dispatch,
+          updateTask
+        );
+
         column.taskIds.forEach((taskId, idx) => {
           dispatch(taskMoved({
             taskId,
             fromColumnId: column.id,
             toColumnId: selectedColumn,
-            toIndex: columns[selectedColumn]?.taskIds.length ?? 0 + idx,
+            toIndex: toColumn?.taskIds.length ?? 0 + idx,
           }));
         });
 

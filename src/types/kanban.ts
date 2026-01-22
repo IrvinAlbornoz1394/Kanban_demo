@@ -50,6 +50,14 @@ export interface Task {
   subtasks?: Subtask[];
   estimatedHours?: number;
   archived?: boolean;
+  columnHistory?: ColumnHistoryEntry[]; // <--- Nuevo campo
   // ...otras propiedades existentes si aplica...
+}
+
+export interface ColumnHistoryEntry {
+  columnId: ID;
+  columnName?: string; // <--- Nuevo campo opcional
+  enteredAt: string; // ISO string
+  exitedAt?: string; // ISO string, undefined si sigue en la columna
 }
 

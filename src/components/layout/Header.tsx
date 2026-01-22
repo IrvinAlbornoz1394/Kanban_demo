@@ -4,10 +4,12 @@ import { toggleTheme } from '../../features/ui/uiSlice';
 import { useAppDispatch } from '../../app/hooks';
 import { CreateWorkspaceModal } from '../ui/CreateWorkspaceModal/CreateWorkspaceModal';
 import { Button } from '../../styles/components.styles';
+import { useNavigate } from 'react-router-dom';
 
 export function Header() {
   const dispatch = useAppDispatch();
   const [open, setOpen] = useState(false);
+  const navigate = useNavigate();
 
   return (
     <>
@@ -21,6 +23,10 @@ export function Header() {
 
           <Button onClick={() => dispatch(toggleTheme())}>
             Toggle Theme
+          </Button>
+
+          <Button onClick={() => navigate('/dashboard')}>
+            Dashboard
           </Button>
         </div>
       </HeaderWrapper>

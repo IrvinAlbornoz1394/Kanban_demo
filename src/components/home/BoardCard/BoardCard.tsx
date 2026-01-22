@@ -111,7 +111,7 @@ export function BoardCard({ board, isAdd, workspaceId }: Props) {
           <Modal onClose={() => setDeleteOpen(false)}>
             <h3>¿Eliminar este board?</h3>
             <p>Esta acción no se puede deshacer.</p>
-            <Button style={{ color: 'red' }} onClick={handleDelete}>
+            <Button style={{ color: 'red', marginRight: 8 }} onClick={handleDelete}>
               Eliminar
             </Button>
             <Button onClick={() => setDeleteOpen(false)}>Cancelar</Button>

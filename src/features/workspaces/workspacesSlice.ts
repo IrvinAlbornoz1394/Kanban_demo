@@ -28,12 +28,19 @@ const workspacesSlice = createSlice({
         ws.boardIds.push(action.payload.boardId);
       }
     },
+    removeWorkspace(
+      state,
+      action: PayloadAction<{ workspaceId: string }>
+    ) {
+      return state.filter(ws => ws.id !== action.payload.workspaceId);
+    },
   },
 });
 
 export const {
   workspaceCreated,
   boardAddedToWorkspace,
+  removeWorkspace,
 } = workspacesSlice.actions;
 
 export default workspacesSlice.reducer;
