@@ -4,7 +4,11 @@
 
 ## Descripción
 
-Esta aplicación permite gestionar tableros, columnas y tareas al estilo Kanban. Permite crear, editar y eliminar boards, columnas y tareas, así como organizar tareas mediante drag & drop. Incluye persistencia local y pruebas automatizadas.
+Esta aplicación permite gestionar tableros, columnas y tareas al estilo Kanban. Puedes crear, editar y eliminar boards, columnas y tareas, así como organizar tareas mediante drag & drop. Incluye persistencia local, pruebas automatizadas y visualización de analíticas en el dashboard.
+
+## Navegación
+
+- Desde cualquier board o el dashboard, puedes regresar a la vista de "Workspaces" usando el botón "← Volver a Workspaces" en la parte superior de la página.
 
 ## Tecnologías principales
 
@@ -19,18 +23,18 @@ Esta aplicación permite gestionar tableros, columnas y tareas al estilo Kanban.
 ## Instalación y uso
 
 1. Clona el repositorio:
-  ```bash
-  git clone <url-del-repo>
-  cd Kanban_demo
-  ```
+   ```bash
+   git clone <url-del-repo>
+   cd Kanban_demo
+   ```
 2. Instala las dependencias:
-  ```bash
-  npm install
-  ```
+   ```bash
+   npm install
+   ```
 3. Inicia la aplicación en modo desarrollo:
-  ```bash
-  npm run dev
-  ```
+   ```bash
+   npm run dev
+   ```
 4. Abre [http://localhost:5173](http://localhost:5173) en tu navegador.
 
 ## Scripts útiles
@@ -47,7 +51,7 @@ src/
   components/     # Componentes reutilizables (Board, Column, Task, UI, etc.)
   features/       # Slices de Redux para boards, columns, tasks, ui, workspaces
   hooks/          # Custom hooks
-  pages/          # Páginas principales (BoardPage, etc.)
+  pages/          # Páginas principales (BoardPage, DashboardPage, etc.)
   styles/         # Estilos globales y theming
   types/          # Tipos TypeScript
   utils/          # Utilidades
